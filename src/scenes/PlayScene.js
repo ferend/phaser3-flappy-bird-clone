@@ -12,8 +12,12 @@ class PlayScene extends Phaser.Scene{
         this.pipeVerticalDistanceRange = [150,250];
         this.pipeHorizontalDistanceRange = [500,600];
         this.pipeVelocity = -200;
-
+        this.playScore = 0;
+        this.playerScoreText = '';
+        this.playerBestScoreText = '';
     }
+
+
     preload() {
         this.load.image("sky", "assets/sky.png");
         this.load.image("bird", "assets/bird.png");
@@ -26,6 +30,7 @@ class PlayScene extends Phaser.Scene{
         this.createPipes();
         this.inputController();
         this.createColliders();
+        this.createPlayerScore();
     }
 
     createBg() {
@@ -53,6 +58,32 @@ class PlayScene extends Phaser.Scene{
         this.physics.add.collider(this.bird,this.pipes,this.gameOver,null, this);
     }
 
+    createPlayerScore(){
+        this.playScore = 0;
+        const bestScore = localStorage.getItem('bestScore');
+        this.playerScoreText = this.add.text(16,16, `Score:  ${0}`, {
+            fontsize:'38px',
+            fill: '#000'
+        });
+        this.playerBestScoreText = this.add.text(16,40, `Best Score:  ${bestScore || 0}`, {
+            fontsize:'32px',
+            fill: '#000'
+        });
+    }
+
+    increaseScore(){
+        this.playScore++;
+        this.playerScoreText.setText(`Score:  ${this.playScore}`)
+    }
+    savePlayerBestScore(){
+        this.playerBestScoreText = localStorage.getItem('bestScore');
+        const bestScore = this.playerBestScoreText && parseInt(this.playerBestScoreText,10);
+        if(!bestScore || this.playScore > bestScore){
+            localStorage.setItem('bestScore', this.playScore);
+        }
+    }
+
+
     inputController(){
         this.input.on("pointerdown" , this.bodyFlap,this);
         this.input.keyboard.on("keydown_SPACE" , this.bodyFlap,this);
@@ -78,6 +109,8 @@ class PlayScene extends Phaser.Scene{
             },
             loop: false
         })
+        this.savePlayerBestScore();
+
     }
 
      placePipes(uPipe,lPipe) {
@@ -87,7 +120,6 @@ class PlayScene extends Phaser.Scene{
         const pipeHorizontalDistance = Phaser.Math.Between(...this.pipeHorizontalDistanceRange);
         uPipe.x = rightMostXPos + pipeHorizontalDistance;
         uPipe.y = pipeVerticalPosition;
-
         lPipe.x = uPipe.x;
         lPipe.y = uPipe.y + pipeRange;
     }
@@ -100,6 +132,8 @@ class PlayScene extends Phaser.Scene{
                 tempPipes.push(pipe);
                 if(tempPipes.length ===2) {
                     this.placePipes(...tempPipes);
+                    this.increaseScore();
+                    this.savePlayerBestScore();
                 }
             }
         })
