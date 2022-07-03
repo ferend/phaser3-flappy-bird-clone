@@ -11,7 +11,7 @@ class PlayScene extends Phaser.Scene{
         this.flappingVelocity = 300;
         this.pipeVerticalDistanceRange = [150,250];
         this.pipeHorizontalDistanceRange = [500,600];
-
+        this.pipeVelocity = -200;
 
     }
     preload() {
@@ -21,26 +21,49 @@ class PlayScene extends Phaser.Scene{
 
     }
     create() {
+        this.createBg();
+        this.createBird();
+        this.createPipes();
+        this.inputController();
+        this.createColliders();
+    }
 
+    createBg() {
         this.add.image(0, 0, "sky").setOrigin(0);
+    }
+
+    createBird() {
         this.bird = this.physics.add.sprite(this.config.startPos.x, this.config.startPos.y, "bird").setOrigin(0);
         this.bird.body.gravity.y = 400;
+    }
 
+    createPipes(){
         this.pipes= this.physics.add.group();
-        this.input.on("pointerdown" , this.bodyFlap,this);
-        this.input.keyboard.on("keydown_SPACE" , this.bodyFlap,this);
-
         for (let i = 0; i <pipesToRender; i ++) {
 
             const upperPipe = this.pipes.create(0,0,"pipe").setOrigin(0,1);
             const lowerPipe = this.pipes.create(0,0 ,"pipe").setOrigin(0,0);
             this.placePipes(upperPipe,lowerPipe);
         }
-        this.pipes.setVelocityX(-200);
+        this.pipes.setVelocityX(this.pipeVelocity);
+    }
 
+    createColliders(){
+        this.physics.add.collider(this.bird,this.pipes,this.gameOver,null, this);
+    }
+
+
+
+    inputController(){
+        this.input.on("pointerdown" , this.bodyFlap,this);
+        this.input.keyboard.on("keydown_SPACE" , this.bodyFlap,this);
     }
 
     update() {
+        this.gameOver();
+    }
+
+    gameOver(){
         if(this.bird.y > this.config.height || this.bird.y < - this.bird.height) {
             // alert("you lost")
             this.restartPlayerFunction();
