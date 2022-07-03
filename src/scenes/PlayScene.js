@@ -41,18 +41,17 @@ class PlayScene extends Phaser.Scene{
         this.pipes= this.physics.add.group();
         for (let i = 0; i <pipesToRender; i ++) {
 
-            const upperPipe = this.pipes.create(0,0,"pipe").setOrigin(0,1);
-            const lowerPipe = this.pipes.create(0,0 ,"pipe").setOrigin(0,0);
+            const upperPipe = this.pipes.create(0,0,"pipe").setImmovable(true).setOrigin(0,1);
+            const lowerPipe = this.pipes.create(0,0 ,"pipe").setImmovable(true).setOrigin(0,0);
             this.placePipes(upperPipe,lowerPipe);
         }
         this.pipes.setVelocityX(this.pipeVelocity);
     }
 
     createColliders(){
+        this.bird.setCollideWorldBounds(true);
         this.physics.add.collider(this.bird,this.pipes,this.gameOver,null, this);
     }
-
-
 
     inputController(){
         this.input.on("pointerdown" , this.bodyFlap,this);
@@ -60,15 +59,25 @@ class PlayScene extends Phaser.Scene{
     }
 
     update() {
-        this.gameOver();
+        if(this.bird.getBounds().bottom >= this.config.height || this.bird.y <= 0) {
+            // alert("you lost")
+            this.gameOver();
+        }
+        this.recyclePipes();
     }
 
     gameOver(){
-        if(this.bird.y > this.config.height || this.bird.y < - this.bird.height) {
-            // alert("you lost")
-            this.restartPlayerFunction();
-        }
-        this.recyclePipes();
+        this.physics.pause();
+
+        //Restart event
+        this.time.addEvent({
+            delay:1000,
+            callback: ()=> {
+            this.scene.restart();
+                this.restartPlayerPosition();
+            },
+            loop: false
+        })
     }
 
      placePipes(uPipe,lPipe) {
@@ -97,7 +106,7 @@ class PlayScene extends Phaser.Scene{
     }
 
 
-     restartPlayerFunction() {
+     restartPlayerPosition() {
         this.bird.x = this.config.startPos.x;
          this.bird.y = this.config.startPos.y;
          this.bird.body.velocity.y = 0;
