@@ -17,13 +17,6 @@ class PlayScene extends Phaser.Scene{
         this.playerBestScoreText = '';
     }
 
-
-    preload() {
-        this.load.image("sky", "assets/sky.png");
-        this.load.image("bird", "assets/bird.png");
-        this.load.image("pipe", "assets/pipe.png");
-        this.load.image("pause-button-image", "assets/pause-button.png");
-    }
     create() {
         this.createBg();
         this.createBird();
