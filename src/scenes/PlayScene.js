@@ -1,11 +1,10 @@
-import Phaser from "phaser";
+import BaseScene from "./BaseScene";
 
 const pipesToRender = 4;
 
-class PlayScene extends Phaser.Scene{
+class PlayScene extends BaseScene{
     constructor(config) {
-        super("PlayScene");
-       this.config = config;
+        super("PlayScene", config);
         this.bird = null;
         this.pipes = null
         this.flappingVelocity = 300;
@@ -18,17 +17,13 @@ class PlayScene extends Phaser.Scene{
     }
 
     create() {
-        this.createBg();
+        super.create();
         this.createBird();
         this.createPipes();
         this.inputController();
         this.createColliders();
         this.createPlayerScore();
         this.pauseButton();
-    }
-
-    createBg() {
-        this.add.image(0, 0, "sky").setOrigin(0);
     }
 
     pauseButton(){
