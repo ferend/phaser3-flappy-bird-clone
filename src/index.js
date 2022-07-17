@@ -3,6 +3,7 @@ import playScene from "./scenes/PlayScene";
 import menuScene from "./scenes/MenuScene";
 import preloadScene from "./scenes/PreloadScene";
 import scoreScene from "./scenes/ScoreScene";
+import pauseScene from "./scenes/PauseScene";
 
 const width = 800;
 const height = 600;
@@ -14,7 +15,7 @@ const sharedConfig = {
     height: height,
     startPos: birdPos,
 }
-const scenes = [preloadScene, menuScene,playScene, scoreScene];
+const scenes = [preloadScene, menuScene, playScene, scoreScene, pauseScene];
 const initScenes = () => scenes.map((Scene) => new Scene(sharedConfig));
 const config = {
     type: Phaser.AUTO,

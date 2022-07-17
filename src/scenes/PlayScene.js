@@ -24,6 +24,7 @@ class PlayScene extends BaseScene{
         this.createColliders();
         this.createPlayerScore();
         this.pauseButton();
+        this.eventListener();
     }
 
     pauseButton(){
@@ -33,6 +34,8 @@ class PlayScene extends BaseScene{
         button.on('pointerdown', () => {
             this.scene.pause();
             this.physics.pause();
+            // Rather than using scene.start I used scene.launch in here, start shuts down current scene and loads new one.
+            this.scene.launch('PauseScene');
         });
     }
 
@@ -94,6 +97,12 @@ class PlayScene extends BaseScene{
             this.gameOver();
         }
         this.recyclePipes();
+    }
+
+    eventListener() {
+        this.events.on('resume', () => {
+            this.physics.resume();
+        })
     }
 
     gameOver(){
