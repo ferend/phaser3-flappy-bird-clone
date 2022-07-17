@@ -20,12 +20,13 @@ const initScenes = () => scenes.map((Scene) => new Scene(sharedConfig));
 const config = {
     type: Phaser.AUTO,
     ...sharedConfig,
+    pixelArt: true,
     physics: {
         // Arcade physics plugin.
         default: "arcade",
         arcade: {
             // gizmos of game objects
-            debug: true
+            debug: false
         }
     },
     scene: initScenes()

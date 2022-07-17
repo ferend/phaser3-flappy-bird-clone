@@ -25,6 +25,15 @@ class PlayScene extends BaseScene{
         this.createPlayerScore();
         this.pauseButton();
         this.eventListener();
+        this.anims.create({
+            key:  'fly',
+            frames: this.anims.generateFrameNumbers('bird', {
+                start: 8, end: 15
+            }),
+            frameRate: 8,
+            repeat: -1
+        });
+        this.bird.play('fly');
     }
 
     pauseButton(){
@@ -41,8 +50,12 @@ class PlayScene extends BaseScene{
     }
 
     createBird() {
-        this.bird = this.physics.add.sprite(this.config.startPos.x, this.config.startPos.y, "bird").setOrigin(0);
+        this.bird = this.physics.add.sprite(this.config.startPos.x, this.config.startPos.y, "bird")
+            .setFlip(true)
+            .setScale(3)
+            .setOrigin(0);
         this.bird.body.gravity.y = 400;
+        this.bird.setBodySize(this.bird.width , this.bird.height -7);
     }
 
     createPipes(){
