@@ -27,7 +27,13 @@ class MenuScene extends BaseScene{
         textGameObject.on('pointerout', () => {
             textGameObject.setStyle({fill : '#00000f'})
         });
-  
+        textGameObject.on('pointerup', () => {
+            menuItem.scene && this.scene.start(menuItem.scene);
+            if(menuItem.text === 'Exit') {
+                console.log(' Exit Game ');
+                this.game.destroy(true);
+            }
+        });
     }
 }
 
