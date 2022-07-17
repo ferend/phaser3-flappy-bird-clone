@@ -34,7 +34,6 @@ UserSchema.methods.isValidPassword = async function (password) {
 const UserModel = mongoose.model('user', UserSchema);
 module.exports = UserModel;
 
-
 // First, we imported the mongoose and bcrypt packages. bcrypt is a helper library for hashing passwords.
 //     Next, we created a new mongoose Schema object which allows us to define the fields we want our model to have and in each of these fields we can specify their type, if they are required, and provide default values. By creating and using a Schema object, it will provide us built-in typecasting and validation. For example, if we’re to pass "12" instead of 12 for the high score, mongoose will automatically cast that string into a number.
 //     Then, we created a pre-save hook that will be called before a document is saved in MongoDB. When this hook is triggered, we get a reference to the current document that is about to be saved, and then we used bcrypt to hash that users password. Finally, we call the callback function that passed as an argument to our hook.
