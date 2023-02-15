@@ -1,7 +1,11 @@
 import Phaser from "phaser";
 import playScene from "./scenes/PlayScene";
+import menuScene from "./scenes/MenuScene";
+import preloadScene from "./scenes/PreloadScene";
+import scoreScene from "./scenes/ScoreScene";
+import pauseScene from "./scenes/PauseScene";
 
-const width = 800;
+const width = 540;
 const height = 600;
 const birdPos = {x: width * 0.1, y : height/2};
 
@@ -11,19 +15,21 @@ const sharedConfig = {
     height: height,
     startPos: birdPos,
 }
-
+const scenes = [preloadScene, menuScene, playScene, scoreScene, pauseScene];
+const initScenes = () => scenes.map((Scene) => new Scene(sharedConfig));
 const config = {
     type: Phaser.AUTO,
     ...sharedConfig,
+    pixelArt: true,
     physics: {
         // Arcade physics plugin.
         default: "arcade",
         arcade: {
             // gizmos of game objects
-            debug: true
+            debug: false
         }
     },
-    scene: [new playScene(sharedConfig)]
+    scene: initScenes()
 }
 
 new Phaser.Game(config);
